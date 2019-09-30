@@ -81,11 +81,10 @@ int main()
 	bool m_missileLaunch = false;
 	int m_selection;
 	int m_chanceOfHit;
-	int m_nuclear = 1;
-	int m_ballistic = 20;
-	int m_enemy = 10;
+	int m_nuclear = 8;
+	int m_ballistic = 15;
+	int m_enemy = 15;
 	int m_destroyed = 0;
-	int m_disabled = 0;
 
 	while (!m_gameover)
 	{
@@ -116,18 +115,27 @@ int main()
 			}
 			else if (m_selection == 2)
 			{
-				std::cout << "You have selected the ballistic missile\n";
-				bomb.payload = Warhead::Explosive;
-				m_ballistic--;
-				m_target = true;
-				m_misssileSelect = false;
+				if (m_ballistic > 0)
+				{
+					std::cout << "You have selected the ballistic missile\n";
+					bomb.payload = Warhead::Explosive;
+					m_ballistic--;
+					m_target = true;
+					m_misssileSelect = false;
+				}
+				else
+				{
+					std::cout << "You have no Ballistic missile left\n";
+					m_misssileSelect = true;
+					m_target = false;
+					m_missileLaunch = false;
+				}
 			}
-			else
+
+			if (m_nuclear <= 0 && m_ballistic <= 0)
 			{
-				std::cout << "You have no Ballistic missile left\n";
-				m_misssileSelect = true;
-				m_target = false;
-				m_missileLaunch = false;
+				std::cout << "You have no longer have the ability to defend your base\n";
+				m_gameover = true;
 			}
 		}
 		if (m_target)
@@ -136,7 +144,7 @@ int main()
 			division.coordinates.m_x = rand() % 20 + 1;
 			division.coordinates.m_y = rand() % 20 + 1;
 
-			std::cout << "---------------------------\nScaning for targets...\n Found multiple contacts: " << m_enemy << "\n---------------------------\nTargeting enemy on X:" << division.coordinates.m_x << " Y:" << division.coordinates.m_y << " coordinates\n";
+			std::cout << "---------------------------\nScaning for targets...\nFound multiple contacts: " << m_enemy << "\n---------------------------\nTargeting enemy on X:" << division.coordinates.m_x << " Y:" << division.coordinates.m_y << " coordinates\n";
 			std::cout << "You have found tank\nConfirm to launch missile?\nYes = 1 or No = 2\n---------------------------\n";
 			std::cin >> m_selection;
 
@@ -149,7 +157,7 @@ int main()
 			}
 			else if (m_selection == 2)
 			{
-				std::cout << "Aborting missile launch";
+				std::cout << "---------------------------\nAborting missile launch\n";
 				m_misssileSelect = true;
 			}
 			else
@@ -186,11 +194,11 @@ int main()
 				}
 				else
 				{
-					std::cout << "The Nuclear Missile has failed to connect on target but the target is disabled\n";
-					m_enemy--;
-					m_disabled++;
+					std::cout << "The Nuclear Missile has failed to calulate on target position.....\nAborting launch\n";;
+					m_nuclear++;
 					m_misssileSelect = true;
 				}
+				std::cout << "---------------------------\nEnemy left : " << m_enemy << "\nEnemy destroyed: " << m_destroyed << "\n";
 			}
 			if (bomb.payload == Warhead::Explosive)
 			{
@@ -198,20 +206,50 @@ int main()
 				{
 					std::cout << "Ballistic missile has splashed at the target and is destroyed\n";
 					m_enemy--;
+					m_destroyed++;
 					m_misssileSelect = true;
 				}
 				else
 				{
-					std::cout << "Ballistic missile has failed to connect on target\n";
+					std::cout << "Ballistic missile has failed to calulate on target position.....\nAborting launch\n";
+					m_ballistic++;
 					m_misssileSelect = true;
 				}
+			std::cout << "---------------------------\nEnemy left : " << m_enemy << "\n Enemy destroyed : " << m_destroyed << "\n";
 			}
 
 		}
 
+		if (m_enemy <= 0)
+		{
+			std::cout << "---------------------------\nyou successfully defended your base!!!!\n";
+			m_gameover = true;
+		}
+
 	}
+
+	//if (m_gameover)
+	//{
+	//	std::cout << "-----------------------\nThe game is over.... Do you want to play again???\n Yes = 1 or No = 2:\n-----------------------\n";
+	//	std::cin >> m_selection;
+
+	//	if (m_selection == 1)
+	//	{
+	//		m_gameover = false;
+	//		m_nuclear = 8;
+	//		m_ballistic = 15;
+	//		m_enemy = rand() % 15 + 1;
+	//		m_destroyed = 0;
+
+	//	}
+	//	else
+	//	{
+	//		std::cout << "\nThank you for playing!!!!!";
+	//	}
+	//}
 	
-	bomb.update();
+	
+	
 
 
 	system("PAUSE");
