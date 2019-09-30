@@ -1,6 +1,30 @@
 #include <iostream>
+#include <ctime>
 
 
+
+typedef struct Position
+{
+	int m_x;
+	int m_y;
+
+	void print()
+	{
+		std::cout << m_x << m_y << std::endl;
+	}
+
+
+
+}Coordinates;
+
+
+enum Warhead { Explosive, Nuclear };
+
+typedef struct Enemy
+{
+	Coordinates coordinates;
+
+}Target;
 
 struct missileCommand
 {
@@ -27,38 +51,17 @@ struct missileCommand
 
 	void update()
 	{
-		//coordinates.x =
+		coordinates.m_x += 1;
+		coordinates.m_y += 2;
 	}
 
 };
 
-
-struct Position
-{
-	int m_x;
-	int m_y;
-
-	void print()
-	{
-		std::cout << m_x << m_y << std::endl;
-	}
-
-}Coordinates;
-
-
-enum Warhead { Explosive, Nuclear };
-
-
-struct Enemy
-{
-
-	
-}; /*Target;*/
-
-
-
 int main()
 {
+
+
+
 
 	std::cout << "Select a Warhead: ";
 
