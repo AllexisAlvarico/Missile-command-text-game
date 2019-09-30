@@ -81,7 +81,7 @@ int main()
 	bool m_missileLaunch = false;
 	int m_selection;
 	int m_chanceOfHit;
-	int m_nuclear = 8;
+	int m_nuclear = 1;
 	int m_ballistic = 20;
 	int m_enemy = 10;
 	int m_destroyed = 0;
@@ -91,8 +91,6 @@ int main()
 	{
 		if (m_misssileSelect)
 		{
-
-
 			std::cout << "---------------------------\nYour home base is X:" << base.m_x << " Y:" << base.m_y <<
 				"\nArmory:\nNuclear missile " << m_nuclear << "\nBallistic missile: " << m_ballistic
 				<< "\n---------------------------\nNuclear Missile = 1 Ballistic Missiles= 2\n---------------------------\nSelect a Warhead: ";
@@ -100,13 +98,20 @@ int main()
 			std::cout << "---------------------------\n";
 			if (m_selection == 1)
 			{
-				if (m_nuclear != 0)
+				if (m_nuclear > 0)
 				{
 					std::cout << "You have selected the nuclear missile\n";
 					bomb.payload = Warhead::Nuclear;
 					m_target = true;
 					m_nuclear--;
 					m_misssileSelect = false;
+				}
+				else
+				{
+					std::cout << "You have no nuclear missile left\n";
+					m_misssileSelect = true;
+					m_target = false;
+					m_missileLaunch = false;
 				}
 			}
 			else if (m_selection == 2)
@@ -119,7 +124,10 @@ int main()
 			}
 			else
 			{
-				std::cout << "The missile you selected is not in the armory\n";
+				std::cout << "You have no Ballistic missile left\n";
+				m_misssileSelect = true;
+				m_target = false;
+				m_missileLaunch = false;
 			}
 		}
 		if (m_target)
